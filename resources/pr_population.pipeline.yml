@@ -1,0 +1,20 @@
+resources:
+  pipelines:
+    pr_population:
+      name: pr_population
+      catalog: pr_population
+      schema: bronze
+      serverless: true
+      edition: ADVANCED
+      channel: current
+      development: false
+      root_path: ../src/pipeline
+      libraries:
+        - glob:
+            include: ../src/pipeline/bronze/**
+        - glob:
+            include: ../src/pipeline/silver/**
+        - glob:
+            include: ../src/pipeline/gold/**
+      configuration:
+        raw_volume: /Volumes/pr_population/bronze/raw

@@ -1,0 +1,334 @@
+{
+  "datasets": [
+    {
+      "name": "q1",
+      "displayName": "Q1 US population 2013-2018",
+      "queryLines": [
+        "SELECT nation, year_start, year_end, n_years, mean_population, stddev_sample, stddev_population\n",
+        "FROM q1_population_2013_2018"
+      ]
+    },
+    {
+      "name": "q2",
+      "displayName": "Q2 best year per series",
+      "queryLines": [
+        "SELECT series_id, series_title, best_year, year_value\n",
+        "FROM q2_series_best_year\n",
+        "ORDER BY year_value DESC"
+      ]
+    },
+    {
+      "name": "q3",
+      "displayName": "Q3 PRS30006032 Q01",
+      "queryLines": [
+        "SELECT series_id, period, year, make_date(year, 1, 1) AS year_date, value, population\n",
+        "FROM q3_prs30006032_q01\n",
+        "ORDER BY year"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "overview",
+      "displayName": "Overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "name": "title",
+            "multilineTextboxSpec": {
+              "lines": ["# BLS productivity and US population\n"]
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 12, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "subtitle",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Gold answers for a stakeholder. Q1 is ACS population 2013-2018. Q2 is the best year per BLS series. Q3 is PRS30006032 Q01, with population where ACS has that year."
+              ]
+            }
+          },
+          "position": {"x": 0, "y": 1, "width": 12, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "q1-mean",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q1",
+                  "fields": [
+                    {"name": "mean_population", "expression": "`mean_population`"}
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "mean_population",
+                  "displayName": "Mean population",
+                  "format": {
+                    "type": "number",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {"type": "max", "places": 2}
+                  }
+                }
+              },
+              "frame": {"showTitle": true, "title": "Q1 mean US population"}
+            }
+          },
+          "position": {"x": 0, "y": 2, "width": 3, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "q1-stdev",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q1",
+                  "fields": [
+                    {"name": "stddev_sample", "expression": "`stddev_sample`"}
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "stddev_sample",
+                  "displayName": "Sample stdev",
+                  "format": {
+                    "type": "number",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {"type": "max", "places": 2}
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Q1 sample stdev",
+                "showDescription": true,
+                "description": "Reported answer. Population stdev is on the gold table."
+              }
+            }
+          },
+          "position": {"x": 3, "y": 2, "width": 3, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "q2-series",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q2",
+                  "fields": [
+                    {"name": "count(series_id)", "expression": "COUNT(`series_id`)"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(series_id)",
+                  "displayName": "Series"
+                }
+              },
+              "frame": {"showTitle": true, "title": "Q2 series count"}
+            }
+          },
+          "position": {"x": 6, "y": 2, "width": 3, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "q3-years",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q3",
+                  "fields": [
+                    {"name": "count(year)", "expression": "COUNT(`year`)"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(year)",
+                  "displayName": "Years"
+                }
+              },
+              "frame": {"showTitle": true, "title": "Q3 years"}
+            }
+          },
+          "position": {"x": 9, "y": 2, "width": 3, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "q3-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q3",
+                  "fields": [
+                    {"name": "year_date", "expression": "`year_date`"},
+                    {"name": "value", "expression": "`value`"}
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year_date",
+                  "displayName": "Year",
+                  "scale": {"type": "temporal"}
+                },
+                "y": {
+                  "fieldName": "value",
+                  "displayName": "Q01 value",
+                  "scale": {"type": "quantitative"}
+                }
+              },
+              "annotations": [
+                {
+                  "type": "vertical-line",
+                  "encodings": {
+                    "x": {
+                      "dataValue": "2020-01-01T00:00:00.000",
+                      "dataType": "DATETIME"
+                    },
+                    "label": {"value": "No ACS population"},
+                    "color": {"value": "#995495"}
+                  }
+                }
+              ],
+              "frame": {
+                "showTitle": true,
+                "title": "PRS30006032 Q01 by year"
+              }
+            }
+          },
+          "position": {"x": 0, "y": 5, "width": 12, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "q2-table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q2",
+                  "fields": [
+                    {"name": "series_id", "expression": "`series_id`"},
+                    {"name": "series_title", "expression": "`series_title`"},
+                    {"name": "best_year", "expression": "`best_year`"},
+                    {"name": "year_value", "expression": "`year_value`"}
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "series_id", "displayName": "Series"},
+                  {"fieldName": "series_title", "displayName": "Label"},
+                  {"fieldName": "best_year", "displayName": "Best year"},
+                  {"fieldName": "year_value", "displayName": "Year value"}
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Q2 best year per series"
+              }
+            }
+          },
+          "position": {"x": 0, "y": 11, "width": 12, "height": 8}
+        },
+        {
+          "widget": {
+            "name": "q3-table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "q3",
+                  "fields": [
+                    {"name": "year", "expression": "`year`"},
+                    {"name": "value", "expression": "`value`"},
+                    {"name": "population", "expression": "`population`"}
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "year", "displayName": "Year"},
+                  {"fieldName": "value", "displayName": "Q01 value"},
+                  {"fieldName": "population", "displayName": "Population"}
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Q3 PRS30006032 Q01"
+              }
+            }
+          },
+          "position": {"x": 0, "y": 19, "width": 12, "height": 6}
+        }
+      ]
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {"light": "#FCFCFC", "dark": "#1F272D"},
+      "widgetBackgroundColor": {"light": "#FFFFFF", "dark": "#11171C"},
+      "widgetBorderColor": {"light": "#FFFFFF", "dark": "#11171C"},
+      "fontColor": {"light": "#11171C", "dark": "#E8ECF0"},
+      "selectionColor": {"light": "#2272B4", "dark": "#8ACAFF"},
+      "visualizationColors": [
+        "#FFA600",
+        "#FF7054",
+        "#DE5582",
+        "#995495",
+        "#4E5185",
+        "#1D425C",
+        "#99DDB4"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+resources:
+  jobs:
+    pr_population_refresh:
+      name: pr_population_refresh
+      tasks:
+        - task_key: pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.pr_population.id}

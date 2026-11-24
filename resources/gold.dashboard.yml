@@ -1,0 +1,12 @@
+resources:
+  dashboards:
+    gold:
+      display_name: PR Population Gold
+      file_path: ../src/dashboard/gold.lvdash.json
+      warehouse_id: 7f8b0e8d7650a3ff
+      dataset_catalog: pr_population
+      dataset_schema: gold
+      embed_credentials: false
+      permissions:
+        - level: CAN_RUN
+          group_name: users

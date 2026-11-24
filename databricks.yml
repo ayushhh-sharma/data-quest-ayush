@@ -1,0 +1,14 @@
+bundle:
+  name: data-quest
+
+workspace:
+  host: https://dbc-37debd15-633d.cloud.databricks.com
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    workspace:
+      profile: data-quest
